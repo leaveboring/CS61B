@@ -77,8 +77,7 @@ public class Board {
      * Returns whether or not this move is a merge.
      * */
     public boolean move(int col, int row, Tile tile) {
-        int pcol = _viewPerspective.col(col, row, size()),
-                prow = _viewPerspective.row(col, row, size());
+        int pcol = _viewPerspective.col(col, row, size()), prow = _viewPerspective.row(col, row, size());
         if (tile.col() == pcol && tile.row() == prow) {
             return false;
         }

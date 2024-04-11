@@ -93,7 +93,13 @@ public class Model {
      * */
     public static boolean emptySpaceExists(Board b) {
         // TODO: Fill in this function.
-
+        for (int row = 0; row < b.size(); row++) {
+            for (int col = 0; col < b.size(); col++) {
+                if (b.tile(row, col) == null) {
+                    return true;
+                }
+            }
+        }
 
         return false;
     }
@@ -105,8 +111,13 @@ public class Model {
      */
     public static boolean maxTileExists(Board b) {
         // TODO: Fill in this function.
-
-
+        for (int row = 0; row < b.size(); row++) {
+            for (int col = 0; col < b.size(); col++) {
+                if ((b.tile(row, col) != null) && (b.tile(row, col).value() == MAX_PIECE)) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -118,8 +129,17 @@ public class Model {
      */
     public static boolean atLeastOneMoveExists(Board b) {
         // TODO: Fill in this function.
-
-
+        for (int row = 0; row < b.size(); row++) {
+            for (int col = 0; col < b.size(); col++) {
+                if (b.tile(row, col) == null) {
+                    return true;
+                } else if (row > 0 && b.tile(row, col).value() == b.tile(row - 1, col).value()) {
+                    return true;
+                } else if (col > 0 && b.tile(row, col).value() == b.tile(row, col - 1).value()) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -137,9 +157,28 @@ public class Model {
      * */
     public void tilt(Side side) {
         // TODO: Modify this.board (and if applicable, this.score) to account
-        // for the tilt to the Side SIDE.
+        boolean changed = false;
+        switch (side) {
+            case NORTH -> {
+                for (int col = 0; col < board.size(); col++) {
+                    int[] count = {0, 0, 0, 0};
+                    int i = 0;
+                    for (int row = 0; row < board.size(); row++) {
+                        if (board.tile(row, col) != null) {
+                            if (count[i] == 0) {
+                                count[i] = board.tile(row, col).value();
+                            } else if (count[i] == board.tile(row, col).value()) {
+                                count[i] *= 2;
+                                i++;
+                            }
+                        }
 
-
+                    }
+                    for
+                }
+                break;
+            }
+        }
         checkGameOver();
     }
 
