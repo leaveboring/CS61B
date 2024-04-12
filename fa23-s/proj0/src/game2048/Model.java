@@ -161,11 +161,11 @@ public class Model {
         // for the tilt to the Side SIDE.
         // 调整视角
         board.setViewingPerspective(side);
-        //避免重复合并
-        boolean[][] mergedFlag=new boolean[board.size()][board.size()];
 
         for (int col = 0; col < this.board.size(); col++) {
+            //避免重復合併
             int bottom = this.board.size() - 1;
+
             for (int row = this.board.size()-2; row >= 0; row--) {
                 //寻找首个需要移动的位置
                 if (this.board.tile(col, row) != null) {
@@ -174,10 +174,8 @@ public class Model {
                         board.move(col, bottom, this.board.tile(col, row));
                     }
                     //值相等，沒有合併過，合併
-                    else if ((this.board.tile(col, row).value() == this.board.tile(col, bottom).value()) &&
-                            !(mergedFlag[col][bottom])) {
+                    else if ((this.board.tile(col, row).value() == this.board.tile(col, bottom).value())) {
                         board.move(col, bottom, this.board.tile(col, row));
-                        mergedFlag[col][bottom] = true;
                         score += this.board.tile(col, bottom).value();
                         bottom--;
                     } else {
@@ -199,6 +197,7 @@ public class Model {
                 }
             }
         }
+        //調回默認視角
         board.setViewingPerspective(Side.NORTH);
         checkGameOver();
     }
