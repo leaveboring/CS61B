@@ -100,7 +100,6 @@ public class Model {
                 }
             }
         }
-
         return false;
     }
 
@@ -129,13 +128,15 @@ public class Model {
      */
     public static boolean atLeastOneMoveExists(Board b) {
         // TODO: Fill in this function.
-        for (int row = 0; row < b.size(); row++) {
-            for (int col = 0; col < b.size(); col++) {
-                if (b.tile(row, col) == null) {
-                    return true;
-                } else if (row > 0 && b.tile(row, col).value() == b.tile(row - 1, col).value()) {
-                    return true;
-                } else if (col > 0 && b.tile(row, col).value() == b.tile(row, col - 1).value()) {
+        //at least one empty space on the board.
+        if (emptySpaceExists(b)) {
+            return true;
+        }
+        //two adjacent tiles with the same value.
+        for (int row = 1; row < b.size(); row++) {
+            for (int col = 1; col < b.size(); col++) {
+                if ((b.tile(row, col).value() == b.tile(row - 1, col).value()) ||
+                        (b.tile(row, col).value() == b.tile(row, col - 1).value())) {
                     return true;
                 }
             }
@@ -157,28 +158,48 @@ public class Model {
      * */
     public void tilt(Side side) {
         // TODO: Modify this.board (and if applicable, this.score) to account
-        boolean changed = false;
-        switch (side) {
-            case NORTH -> {
-                for (int col = 0; col < board.size(); col++) {
-                    int[] count = {0, 0, 0, 0};
-                    int i = 0;
-                    for (int row = 0; row < board.size(); row++) {
-                        if (board.tile(row, col) != null) {
-                            if (count[i] == 0) {
-                                count[i] = board.tile(row, col).value();
-                            } else if (count[i] == board.tile(row, col).value()) {
-                                count[i] *= 2;
-                                i++;
+        // for the tilt to the Side SIDE.
+        // 调整视角
+        board.setViewingPerspective(side);
+        //避免重复合并
+        boolean[][] mergedFlag=new boolean[board.size()][board.size()];
+
+        for (int col = 0; col < this.board.size(); col++) {
+            int bottom = this.board.size() - 1;
+            for (int row = this.board.size()-2; row >= 0; row--) {
+                //寻找首个需要移动的位置
+                if (this.board.tile(col, row) != null) {
+                    //判斷（col,bottom)是否為空，即第一個空格是否為空
+                    if (this.board.tile(col, bottom) == null) {
+                        board.move(col, bottom, this.board.tile(col, row));
+                    }
+                    //值相等，沒有合併過，合併
+                    else if ((this.board.tile(col, row).value() == this.board.tile(col, bottom).value()) &&
+                            !(mergedFlag[col][bottom])) {
+                        board.move(col, bottom, this.board.tile(col, row));
+                        mergedFlag[col][bottom] = true;
+                        score += this.board.tile(col, bottom).value();
+                        bottom--;
+                    } else {
+                        //值不相等，尋找空位，移動，沒有空位就不動
+                        int emptySpace = -1;
+                        for (int i = bottom; i > row; i--) {
+                            if (this.board.tile(col, i) == null) {
+                                emptySpace = i;
+                                break;
                             }
                         }
-
+                        if (emptySpace != -1) {
+                            board.move(col, emptySpace, this.board.tile(col, row));
+                            bottom = emptySpace;
+                        } else {
+                            bottom = row;
+                        }
                     }
-                    for
                 }
-                break;
             }
         }
+        board.setViewingPerspective(Side.NORTH);
         checkGameOver();
     }
 
