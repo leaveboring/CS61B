@@ -7,8 +7,9 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-public class Bomb {
 
+public class Bomb {
+    
     public String shufflePassword(String s) {
         String code = "" + s.hashCode();
         StdRandom.setSeed(1337);
