@@ -94,11 +94,11 @@ public class LinkedListDeque<T> implements Deque<T> {
 
     public T removeFirst() {
         if (isEmpty()) throw new NoSuchElementException();
-        T item = sentFront.next.item;
         ListNode<T> temp = sentFront.next;
+        T item = temp.item;
         sentFront.next = temp.next;
         temp.next.prev = sentFront;
-        temp = null;
+        size--;
         return item;
     }
 
@@ -108,7 +108,7 @@ public class LinkedListDeque<T> implements Deque<T> {
         ListNode<T> temp = sentLast.prev;
         sentLast.prev = temp.prev;
         temp.prev.next = sentLast;
-        temp = null;
+        size--;
         return item;
     }
 
@@ -128,6 +128,7 @@ public class LinkedListDeque<T> implements Deque<T> {
 
         return getRecursiveHelper(sentFront, index);
     }
+
     public T getRecursiveHelper(ListNode<T> node, int index) {
         if (index == 0) return node.next.item;
         return getRecursiveHelper(node.next, index - 1);
