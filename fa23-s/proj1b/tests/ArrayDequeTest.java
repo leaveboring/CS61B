@@ -186,34 +186,20 @@ public class ArrayDequeTest {
     }
 
 
-//    @Test
-//    public void LinkedListDequeTest() {
-//        LinkedListDeque<String> lld1 = new LinkedListDeque<>();
-//
-//        lld1.addFirst("back");
-//        lld1.addFirst("middle");
-//        lld1.addFirst("front");// after this call we expect: ["front", "middle", "back"]
-//
-//        Deque<String> lld2 = new LinkedListDeque<>(lld1);
-//        assertThat(lld2.toList()).containsExactly("front", "middle", "back").inOrder();
-//    }
-//
-//    @Test
-//    public void getTest() {
-//        LinkedListDeque<String> lld1 = new LinkedListDeque<>();
-//
-//        lld1.addFirst("back");
-//        lld1.addFirst("middle");
-//        lld1.addFirst("front");// after this call we expect: ["front", "middle", "back"]
-//
-//        assertThat(lld1.get(0)).isEqualTo("front");
-//        assertThat(lld1.getRecursive(0)).isEqualTo("front");
-//        assertThat(lld1.get(1)).isEqualTo("middle");
-//        assertThat(lld1.getRecursive(1)).isEqualTo("middle");
-//        assertThat(lld1.get(2)).isEqualTo("back");
-//        assertThat(lld1.getRecursive(2)).isEqualTo("back");
-//    }
-//
+    @Test
+    public void getTest() {
+        Deque<String> lld1 = new ArrayDeque<>();
+
+        lld1.addFirst("back");
+        lld1.addFirst("middle");
+        lld1.addFirst("front");// after this call we expect: ["front", "middle", "back"]
+
+        assertThat(lld1.get(0)).isEqualTo("front");
+        assertThat(lld1.get(1)).isEqualTo("middle");
+        assertThat(lld1.get(2)).isEqualTo("back");
+        
+    }
+
 //    @Test
 //    public void isEmptyAndSizeTest() {
 //        LinkedListDeque<String> lld1 = new LinkedListDeque<>();

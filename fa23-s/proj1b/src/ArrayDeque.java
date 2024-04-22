@@ -113,7 +113,10 @@ public class ArrayDeque<T> implements Deque<T> {
 
     @Override
     public T get(int index) {
-        return items[index];
+        if (index < 0 || index > size) {
+            throw new NoSuchElementException("index is illegal");
+        }
+        return items[(index + front) % len];
     }
 
     @Override
