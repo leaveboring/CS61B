@@ -1,14 +1,20 @@
+import java.util.List;
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
-public class LinkedListDeque<T> {
+public class LinkedListDeque<T> implements Deque<T> {
     //节点定义
     public static class ListNode<TT> {
         TT item;
         ListNode<TT> prev;
         ListNode<TT> next;
 
-        public ListNode() {}
-        public ListNode(TT item) { this.item = item;}
+        public ListNode() {
+            item = null;
+        }
+        public ListNode(TT item) {
+            this.item = item;
+        }
         public ListNode(TT item, ListNode<TT> prev, ListNode<TT> next) {
             this.item = item;
             this.prev = prev;
@@ -20,7 +26,11 @@ public class LinkedListDeque<T> {
     private final ListNode<T> sentFront = new ListNode<T>();
     private final ListNode<T> sentLast = new ListNode<T>();
     //无参构造
-    public LinkedListDeque() {}
+    public LinkedListDeque(){
+        sentFront.next = sentLast;
+        sentLast.prev = sentFront;
+    }
+
     //有参构造
     public LinkedListDeque(LinkedListDeque<T> other) {
         if (other == null) throw new NullPointerException();
@@ -53,6 +63,18 @@ public class LinkedListDeque<T> {
         size++;
     }
 
+    @Override
+    public List<T> toList() {
+        List<T> returnList = new ArrayList<>();
+        ListNode<T> tmp = sentFront.next;
+        for (int i = 0; i < size; i++) {
+            T var = get(i);
+            returnList.add(i, var);
+            tmp = tmp.next;
+        }
+        return returnList;
+    }
+
     public boolean isEmpty() {
         return size == 0;
     }
@@ -63,8 +85,9 @@ public class LinkedListDeque<T> {
 
     public void printDeque() {
         ListNode<T> temp = sentFront.next;
-        while (temp != null) {
+        while (temp != sentLast) {
             System.out.print(temp.item + " ");
+            temp = temp.next;
         }
         System.out.println();
     }
@@ -87,5 +110,26 @@ public class LinkedListDeque<T> {
         temp.prev.next = sentLast;
         temp = null;
         return item;
+    }
+
+    @Override
+    public T get(int index) {
+        if (size == 0) throw new NoSuchElementException();
+        ListNode<T> temp = sentFront.next;
+        for (int i = 0; i < index; i++) {
+            temp = temp.next;
+        }
+        return temp.item;
+    }
+
+    @Override
+    public T getRecursive(int index) {
+        if (index < 0 || index >= size()) return null;
+
+        return getRecursiveHelper(sentFront, index);
+    }
+    public T getRecursiveHelper(ListNode<T> node, int index) {
+        if (index == 0) return node.next.item;
+        return getRecursiveHelper(node.next, index - 1);
     }
 }
