@@ -1,5 +1,6 @@
 import java.util.List;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 public class ArrayDeque<T> implements Deque<T> {
     private int front;
@@ -23,17 +24,17 @@ public class ArrayDeque<T> implements Deque<T> {
 
     @Override
     public void addFirst(T x) {
-        if (len == size) getLagerArray();
-        front = (front - 1) % len;
+        if (len - 1 == size) getLagerArray();
+        front = (front - 1 + len) % len;
         items[front] = x;
         size++;
     }
 
     @Override
     public void addLast(T x) {
-        if (len == size) getLagerArray();
-        tail = (tail + 1) % len;
+        if (len - 1 == size) getLagerArray();
         items[tail] = x;
+        tail = (tail + 1 + len) % len;
         size++;
     }
 
@@ -68,22 +69,34 @@ public class ArrayDeque<T> implements Deque<T> {
         return size;
     }
 
+    public int len() {
+        return len;
+    }
+
     @Override
     public T removeFirst() {
+        if (isEmpty()) {
+            throw new NoSuchElementException("Deque is empty");
+        }
         if (len > 8 && size < len / 4) getSmallerArray();
         T x = items[front];
         items[front] = null;
-        front = (front + 1) % len;
+        front = (front + 1 + len) % len;
+        size--;
         return x;
     }
 
     @Override
     public T removeLast() {
+        if (isEmpty()) {
+            throw new NoSuchElementException("Deque is empty");
+        }
         if (len > 8 && size < len / 4) getSmallerArray();
+        tail = (tail - 1) % len;
         T x = items[tail];
         items[tail] = null;
-        tail = (tail - 1) % len;
-        return null;
+        size--;
+        return x;
     }
 
     public void getSmallerArray() {

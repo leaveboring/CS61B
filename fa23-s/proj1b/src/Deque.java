@@ -40,7 +40,7 @@ public interface Deque<T> {
      * @return the number of items in the deque.
      */
     int size();
-
+    int len();
     /**
      * Remove and return the element at the front of the deque, if it exists.
      *
